@@ -11,7 +11,7 @@ const RootLayout = () => {
 
   return (
     <>
-      <StatusBar />
+      <StatusBar style="auto"/>
       <Stack
         screenOptions={{
           headerStyle: {
@@ -27,17 +27,12 @@ const RootLayout = () => {
           }}
         />
         <Stack.Screen
-          name="about"
+          name="(auth)"
           options={{
-            title: "About",
+            headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="contact"
-          options={{
-            title: "Contact",
-          }}
-        />
+        
       </Stack>
     </>
   );
