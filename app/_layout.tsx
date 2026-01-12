@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, useColorScheme } from "react-native";
 import { Stack } from "expo-router";
 import { Colors } from "../constants/Colors";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const RootLayout = () => {
   const colorScheme = useColorScheme();
@@ -10,7 +11,7 @@ const RootLayout = () => {
   console.log(colorScheme);
 
   return (
-    <>
+    <SafeAreaProvider>
       <StatusBar style="auto"/>
       <Stack
         screenOptions={{
@@ -40,7 +41,7 @@ const RootLayout = () => {
         />
         
       </Stack>
-    </>
+    </SafeAreaProvider>
   );
 };
 
