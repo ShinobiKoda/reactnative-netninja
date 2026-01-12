@@ -1,25 +1,32 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import {Link} from "expo-router"
+import { Link } from "expo-router";
+import ThemedView from "../components/ThemedView";
+import ThemedLogo from "../components/ThemedLogo";
+import Spacer from "../components/Spacer";
+import ThemedText from "../components/ThemedText";
 
 const Home = () => {
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/favicon.png")}
-        style={styles.image}
-      />
+    <ThemedView style={styles.container}>
+      <ThemedLogo />
+      <Spacer height={20} />
 
-      <Text style={styles.title}>List</Text>
-      <Text style={{ marginTop: 10, marginBottom: 30 }}>Reading List App</Text>
+      <ThemedText style={styles.title}>List</ThemedText>
 
-      <View style={styles.card}>
-        <Text>Hello this is a card.</Text>
-      </View>
+      <ThemedText title={true} style={{ marginTop: 10, marginBottom: 30 }}>
+        Reading List App
+      </ThemedText>
 
-      <Link href="/about" style={styles.link}>About Page</Link>
-      <Link href="/contact" style={styles.link}>Contact Page</Link>
-    </View>
+      <Spacer />
+
+      <Link href="/about" style={styles.link}>
+        <ThemedText>About Page</ThemedText>
+      </Link>
+      <Link href="/contact" style={styles.link}>
+        <ThemedText> Contact Page</ThemedText>
+      </Link>
+    </ThemedView>
   );
 };
 
@@ -48,12 +55,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 
-  image: {
-    marginVertical: 20,
-  },
-
-   link: {
+  link: {
     marginVertical: 10,
-    borderBottomWidth: 1
-  }
+    borderBottomWidth: 1,
+  },
 });
