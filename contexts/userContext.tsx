@@ -27,7 +27,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       await account.createEmailPasswordSession(email, password);
       const response = await account.get();
       setUser({ id: response.$id, email: response.email });
-    } catch (err:any) {
+    } catch (err: any) {
       throw new Error(err.message);
     }
   };
@@ -36,13 +36,15 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     try {
       await account.create(ID.unique(), email, password);
       await login(email, password);
-    } catch (err:any) {
+    } catch (err: any) {
       throw new Error(err.message);
     }
   };
 
   const logout = async () => {
-    // TODO: implement logout
+    await account.deleteSession("current");
+    console.log("User logged out")
+    setUser(null);
   };
 
   return (
