@@ -12,13 +12,17 @@ import Spacer from "../../components/Spacer";
 import { Colors } from "../../constants/Colors";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedTextInput from "../../components/ThemedTextInput";
+import { useUser } from "../../hooks/useUser";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const {user} = useUser();
+
   const handleSubmit = () => {
     console.log("Form submitted", email, password);
+    console.log("Current User", user)
   };
 
   return (

@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { Colors } from "../constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { UserProvider } from "../contexts/userContext";
 
 const RootLayout = () => {
   const colorScheme = useColorScheme();
@@ -11,37 +12,38 @@ const RootLayout = () => {
   console.log(colorScheme);
 
   return (
-    <SafeAreaProvider>
-      <StatusBar style="auto"/>
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.navBackground,
-          },
-          headerTintColor: theme.title,
-        }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "Home",
+    <UserProvider>
+      <SafeAreaProvider>
+        <StatusBar style="auto" />
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: theme.navBackground,
+            },
+            headerTintColor: theme.title,
           }}
-        />
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(dashboard)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        
-      </Stack>
-    </SafeAreaProvider>
+        >
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "Home",
+            }}
+          />
+          <Stack.Screen
+            name="(auth)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(dashboard)"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </SafeAreaProvider>
+    </UserProvider>
   );
 };
 
