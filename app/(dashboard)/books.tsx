@@ -1,7 +1,6 @@
 import { StyleSheet, FlatList, Pressable } from "react-native";
 import { Colors } from "../../constants/Colors";
-import { KeyboardAvoidingView, Platform } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 import Spacer from "../../components/Spacer";
 import ThemedText from "../../components/ThemedText";
@@ -11,6 +10,7 @@ import { useBooks } from "../../hooks/useBooks";
 
 const Books = () => {
   const { books } = useBooks();
+  const router = useRouter();
 
   return (
     <ThemedView style={styles.container} >
@@ -27,7 +27,7 @@ const Books = () => {
           item.id ?? `${item.title}-${item.author}-${index}`
         }
         renderItem={({ item }) => (
-          <Pressable>
+          <Pressable onPress={()=>router.push(`/books/${item.id}`)}>
             <ThemedCard style={styles.card}>
               <ThemedText style={styles.title}>{item.title}</ThemedText>
               <ThemedText>{item.author}</ThemedText>
