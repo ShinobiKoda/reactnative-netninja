@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Avatars } from 'react-native-appwrite';
+import { Client, Account, Databases, Avatars,  } from 'react-native-appwrite';
 
 const client = new Client()
   .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!)  
