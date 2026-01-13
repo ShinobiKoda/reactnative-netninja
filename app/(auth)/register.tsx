@@ -12,19 +12,25 @@ import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedTextInput from "../../components/ThemedTextInput";
 import { useUser } from "../../hooks/useUser";
+import { Colors } from "../../constants/Colors";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [error, setError] = useState<string | null>("");
+
   const { register } = useUser();
 
   const handleSubmit = async () => {
     console.log("Form submitted", email, password);
+
+    setError("")
+
     try {
       await register(email, password);
-    } catch (err) {
-      throw new Error(`Error: ${err}`);
+    } catch (err:any) {
+      setError(err.message)
     }
   };
 
@@ -56,6 +62,11 @@ const Register = () => {
           <Text style={{ color: "#f2f2f2" }}>Register</Text>
         </ThemedButton>
 
+
+        <Spacer/>
+
+        {error && <Text style={styles.error}>{error}</Text>}
+
         <Spacer height={100} />
 
         <Link href="/login">
@@ -79,4 +90,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 30,
   },
+   error:{
+    color: Colors.warning,
+    padding: 10,
+    backgroundColor: "#f5c1c8",
+    borderColor: Colors.warning,
+    borderWidth: 1,
+    borderRadius: 6,
+    marginHorizontal: 10
+  }
 });

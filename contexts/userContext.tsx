@@ -27,8 +27,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       await account.createEmailPasswordSession(email, password);
       const response = await account.get();
       setUser({ id: response.$id, email: response.email });
-    } catch (err) {
-      throw new Error(`Error : ${err}`);
+    } catch (err:any) {
+      throw new Error(err.message);
     }
   };
 
@@ -36,8 +36,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     try {
       await account.create(ID.unique(), email, password);
       await login(email, password);
-    } catch (err) {
-      throw new Error(`Error : ${err}`);
+    } catch (err:any) {
+      throw new Error(err.message);
     }
   };
 
