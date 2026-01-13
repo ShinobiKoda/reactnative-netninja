@@ -1,4 +1,9 @@
-import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState } from "react";
 import { Link } from "expo-router";
 import ThemedText from "../../components/ThemedText";
@@ -6,16 +11,25 @@ import ThemedView from "../../components/ThemedView";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedTextInput from "../../components/ThemedTextInput";
+import { useUser } from "../../hooks/useUser";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = () => {
+  const { register } = useUser();
+
+  const handleSubmit = async () => {
     console.log("Form submitted", email, password);
+    try {
+      await register(email, password);
+    } catch (err) {
+      throw new Error(`Error: ${err}`);
+    }
   };
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard .dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ThemedView style={styles.container} safe={true}>
         <Spacer />
 

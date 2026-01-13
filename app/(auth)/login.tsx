@@ -18,11 +18,16 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const {user} = useUser();
+  const { login } = useUser();
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     console.log("Form submitted", email, password);
-    console.log("Current User", user)
+
+    try {
+      await login(email, password);
+    } catch (err) {
+      throw new Error(`Error: ${err}`);
+    }
   };
 
   return (
