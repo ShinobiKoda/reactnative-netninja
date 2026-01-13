@@ -105,7 +105,15 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
 
   const deleteBook = async (id: string) => {
     try {
-    } catch (error) {}
+      await databases.deleteDocument(
+         databaseId,
+        collectionId,
+        id
+      )
+    } catch (error) {
+      console.error("Create book error:", error);
+      throw error;
+    }
   };
 
   useEffect(() => {
