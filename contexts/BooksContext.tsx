@@ -7,7 +7,8 @@ import { useUser } from "../hooks/useUser";
 export type BooksContextValue = {
   books: Book[];
   fetchBooks: () => Promise<void>;
-  fetchBooksById: (id: string) => Promise<void>;
+  fetchBooksById: (id: string) => Promise<Book | null>;
+  fetchBookById: (id: string) => Promise<Book | null>;
   createBook: (data: Book) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
 };
@@ -53,9 +54,25 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
     }
   };
 
-  const fetchBooksById = async (id: string) => {
+  const fetchBooksById = async (id: string): Promise<Book | null> => {
     try {
-    } catch (error) {}
+      const doc = await databases.getDocument(databaseId, collectionId, id);
+      const book: Book = {
+        id: (doc as any).$id,
+        title: (doc as any).title,
+        author: (doc as any).author,
+        description: (doc as any).description,
+        userid: (doc as any).userid,
+      };
+      return book;
+    } catch (error) {
+      console.error("Fetch book by id error:", error);
+      return null;
+    }
+  };
+
+  const fetchBookById = async (id: string): Promise<Book | null> => {
+    return fetchBooksById(id);
   };
 
   const createBook = async (data: Book) => {
@@ -146,7 +163,14 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
 
   return (
     <BooksContext.Provider
-      value={{ books, fetchBooks, fetchBooksById, createBook, deleteBook }}
+      value={{
+        books,
+        fetchBooks,
+        fetchBooksById,
+        fetchBookById,
+        createBook,
+        deleteBook,
+      }}
     >
       {children}
     </BooksContext.Provider>
