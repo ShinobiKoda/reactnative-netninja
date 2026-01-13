@@ -36,7 +36,7 @@ const Login = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ThemedView style={styles.container} safe={true}>
+      <ThemedView style={styles.container}>
         <Spacer />
 
         <ThemedText title={true} style={styles.title}>

@@ -1,5 +1,7 @@
 import { StyleSheet, FlatList, Pressable } from "react-native";
 import { Colors } from "../../constants/Colors";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Spacer from "../../components/Spacer";
 import ThemedText from "../../components/ThemedText";
@@ -11,7 +13,7 @@ const Books = () => {
   const { books } = useBooks();
 
   return (
-    <ThemedView style={styles.container} safe={true}>
+    <ThemedView style={styles.container} >
       <Spacer />
       <ThemedText title={true} style={styles.heading}>
         Your Reading List
@@ -24,7 +26,6 @@ const Books = () => {
         keyExtractor={(item, index) =>
           item.id ?? `${item.title}-${item.author}-${index}`
         }
-        contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <Pressable>
             <ThemedCard style={styles.card}>
@@ -33,6 +34,7 @@ const Books = () => {
             </ThemedCard>
           </Pressable>
         )}
+        ListHeaderComponent={<Spacer height={40} />}
       />
     </ThemedView>
   );
@@ -50,9 +52,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
-  list: {
-    marginTop: 40
-  },
   card: {
     width: "90%",
     marginHorizontal: "5%",
@@ -66,5 +65,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
-  }
+  },
 });
