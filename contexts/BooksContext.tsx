@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { databases } from "../lib/appwrite";
+import client from "../lib/appwrite";
 import { ID, Permission, Query, Role } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
 
@@ -47,7 +48,7 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
       }));
       setBooks(mapped);
     } catch (error) {
-      console.error("Create book error:", error);
+      console.error("Fetch books error:", error);
       throw error;
     }
   };
@@ -91,11 +92,56 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
   };
 
   useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+
+    const channel = `databases.${databaseId}.collections.${collectionId}.documents`;
+
     if (user) {
       fetchBooks();
+
+      unsubscribe = client.subscribe(channel, (response: any) => {
+        const { payload, events } = response;
+
+        const isCreate = events.some((e: string) => e.includes("create"));
+        const isUpdate = events.some((e: string) => e.includes("update"));
+        const isDelete = events.some((e: string) => e.includes("delete"));
+
+        if (payload?.userid && payload.userid !== user.id) return;
+
+        if (isCreate) {
+          const created: Book = {
+            id: payload.$id,
+            title: payload.title,
+            author: payload.author,
+            description: payload.description,
+            userid: payload.userid,
+          };
+          setBooks((prev) => [created, ...prev]);
+        } else if (isUpdate) {
+          setBooks((prev) =>
+            prev.map((b) =>
+              b.id === payload.$id
+                ? {
+                    id: payload.$id,
+                    title: payload.title,
+                    author: payload.author,
+                    description: payload.description,
+                    userid: payload.userid,
+                  }
+                : b
+            )
+          );
+        } else if (isDelete) {
+          setBooks((prev) => prev.filter((b) => b.id !== payload.$id));
+        }
+      });
     } else {
       setBooks([]);
     }
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [user]);
 
   return (
