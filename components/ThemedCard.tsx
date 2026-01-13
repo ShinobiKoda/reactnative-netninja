@@ -42,6 +42,7 @@ export default ThemedCard;
 const styles = StyleSheet.create({
   card: {
     borderRadius: 5,
-    padding: 20
+    padding: 20,
+    marginVertical: 20,
   }
 });

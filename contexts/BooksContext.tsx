@@ -1,6 +1,6 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import { databases } from "../lib/appwrite";
-import { ID, Permission, Role } from "react-native-appwrite";
+import { ID, Permission, Query, Role } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
 
 export type BooksContextValue = {
@@ -16,15 +16,15 @@ export type Book = {
   author: string;
   description: string;
   userid?: string;
+  id?: string;
 };
 
 type BooksProviderProps = {
   children: ReactNode;
 };
 
-const databaseId =
-  process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID! || "69665e1a001df43960c4";
-const collectionId = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID! || "books";
+const databaseId = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
+const collectionId = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
 export const BooksContext = createContext<BooksContextValue | null>(null);
 
@@ -34,7 +34,22 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
 
   const fetchBooks = async () => {
     try {
-    } catch (error) {}
+      if (!user?.id) throw new Error("Not authenticated");
+      const response = await databases.listDocuments(databaseId, collectionId, [
+        Query.equal("userid", user.id),
+      ]);
+      const mapped = response.documents.map((doc: any) => ({
+        id: doc.$id,
+        title: doc.title,
+        author: doc.author,
+        description: doc.description,
+        userid: doc.userid,
+      }));
+      setBooks(mapped);
+    } catch (error) {
+      console.error("Create book error:", error);
+      throw error;
+    }
   };
 
   const fetchBooksById = async (id: string) => {
@@ -56,7 +71,14 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
           Permission.delete(Role.user(user.id)),
         ]
       );
-      setBooks((prev) => [{ ...data, userid: user.id }, ...prev]);
+      const created: Book = {
+        id: (newBook as any).$id,
+        title: (newBook as any).title,
+        author: (newBook as any).author,
+        description: (newBook as any).description,
+        userid: (newBook as any).userid,
+      };
+      setBooks((prev) => [created, ...prev]);
     } catch (error) {
       console.error("Create book error:", error);
       throw error;
@@ -67,6 +89,14 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
     try {
     } catch (error) {}
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchBooks();
+    } else {
+      setBooks([]);
+    }
+  }, [user]);
 
   return (
     <BooksContext.Provider
