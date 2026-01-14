@@ -1,11 +1,11 @@
 {
   "expo": {
     "scheme": "shelfieapp",
-    "name": "reactnative-netninja",
+    "name": "Shelfie",
     "slug": "reactnative-netninja",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo_dark.png",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
@@ -22,10 +22,16 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.shinobikoda.shelfieapp"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ab0dcb81-4212-44aa-beb5-78b180526796"
+      }
     }
   }
 }

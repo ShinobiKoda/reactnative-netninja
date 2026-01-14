@@ -1,73 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Link } from "expo-router";
-import ThemedView from "../components/ThemedView";
-import ThemedLogo from "../components/ThemedLogo";
-import Spacer from "../components/Spacer";
-import ThemedText from "../components/ThemedText";
+import { Redirect } from "expo-router";
 
 const Home = () => {
-  return (
-    <ThemedView style={styles.container} safe={true}>
-      <ThemedLogo />
-
-      <Spacer height={20} />
-
-      <ThemedText style={styles.title}>List</ThemedText>
-
-      <ThemedText title={true} style={{ marginTop: 10, marginBottom: 30 }}>
-        Reading List App
-      </ThemedText>
-
-      <Spacer />
-
-      <Link href="/login" style={styles.link}>
-        <ThemedText>Login Page</ThemedText>
-      </Link>
-      <Link href="/register" style={styles.link}>
-        <ThemedText> Register Page</ThemedText>
-      </Link>
-      <Spacer />
-      <Link href="/profile" style={styles.link}>
-        <ThemedText> Profile Page</ThemedText>
-      </Link>
-      <Link href="/create" style={styles.link}>
-        <ThemedText> Create Page</ThemedText>
-      </Link>
-      <Link href="/books" style={styles.link}>
-        <ThemedText> Books Page</ThemedText>
-      </Link>
-    </ThemedView>
-  );
+  return <Redirect href="/login" />;
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  title: {
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-
-  card: {
-    backgroundColor: "#eee",
-    padding: 20,
-    borderRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-
-  link: {
-    marginVertical: 10,
-    borderBottomWidth: 1,
-  },
-});
