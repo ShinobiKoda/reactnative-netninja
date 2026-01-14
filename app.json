@@ -5,7 +5,7 @@
     "slug": "reactnative-netninja",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo_dark.png",
+    "icon": "./assets/images/shelfie-logo.png",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
@@ -32,6 +32,9 @@
       "eas": {
         "projectId": "ab0dcb81-4212-44aa-beb5-78b180526796"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
