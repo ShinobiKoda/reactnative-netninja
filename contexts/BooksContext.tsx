@@ -89,14 +89,8 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
           Permission.delete(Role.user(user.id)),
         ]
       );
-      const created: Book = {
-        id: (newBook as any).$id,
-        title: (newBook as any).title,
-        author: (newBook as any).author,
-        description: (newBook as any).description,
-        userid: (newBook as any).userid,
-      };
-      setBooks((prev) => [created, ...prev]);
+      // Rely on realtime subscription to add the created book.
+      // This avoids double-insert races between local setState and realtime events.
     } catch (error) {
       console.error("Create book error:", error);
       throw error;
@@ -131,8 +125,6 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
 
         if (isCreate) {
           setBooks((prev) => {
-            // Avoid duplicates when local create sets state and realtime also fires
-            if (prev.some((b) => b.id === payload.$id)) return prev;
             const created: Book = {
               id: payload.$id,
               title: payload.title,
@@ -140,7 +132,16 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
               description: payload.description,
               userid: payload.userid,
             };
-            return [created, ...prev];
+            const next = [created, ...prev];
+            // Ensure uniqueness by id to prevent duplicate entries
+            const seen = new Set<string>();
+            const unique = next.filter((b) => {
+              const bid = b.id ?? `${b.title}-${b.author}`;
+              if (seen.has(bid)) return false;
+              seen.add(bid);
+              return true;
+            });
+            return unique;
           });
         } else if (isUpdate) {
           setBooks((prev) =>
