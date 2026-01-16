@@ -30,12 +30,21 @@ const Create = () => {
   const { createBook } = useBooks();
 
   const handleSubmit = async () => {
-    if (!title || !author || !description) return;
+    // Prevent duplicate submissions and empty values
+    if (loading) return;
+    if (!title.trim() || !author.trim() || !description.trim()) return;
 
     setLoading(true);
-    await createBook({ title, author, description });
-    router.replace("/books");
-    setLoading(false);
+    try {
+      await createBook({ title, author, description });
+
+      setTitle("");
+      setAuthor("");
+      setDescription("");
+      router.replace("/books");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,7 +54,7 @@ const Create = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ThemedView style={{flex: 1}}>
+          <ThemedView style={{ flex: 1 }}>
             <ScrollView
               contentContainerStyle={styles.scroll}
               keyboardShouldPersistTaps="handled"
@@ -101,7 +110,7 @@ export default Create;
 const styles = StyleSheet.create({
   scroll: {
     padding: 20,
-    paddingBottom: 60, // 
+    paddingBottom: 60, //
   },
   title: {
     textAlign: "center",

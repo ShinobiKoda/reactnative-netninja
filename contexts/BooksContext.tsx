@@ -105,11 +105,7 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
 
   const deleteBook = async (id: string) => {
     try {
-      await databases.deleteDocument(
-         databaseId,
-        collectionId,
-        id
-      )
+      await databases.deleteDocument(databaseId, collectionId, id);
     } catch (error) {
       console.error("Create book error:", error);
       throw error;
@@ -134,14 +130,18 @@ export const BooksProvider = ({ children }: BooksProviderProps) => {
         if (payload?.userid && payload.userid !== user.id) return;
 
         if (isCreate) {
-          const created: Book = {
-            id: payload.$id,
-            title: payload.title,
-            author: payload.author,
-            description: payload.description,
-            userid: payload.userid,
-          };
-          setBooks((prev) => [created, ...prev]);
+          setBooks((prev) => {
+            // Avoid duplicates when local create sets state and realtime also fires
+            if (prev.some((b) => b.id === payload.$id)) return prev;
+            const created: Book = {
+              id: payload.$id,
+              title: payload.title,
+              author: payload.author,
+              description: payload.description,
+              userid: payload.userid,
+            };
+            return [created, ...prev];
+          });
         } else if (isUpdate) {
           setBooks((prev) =>
             prev.map((b) =>
